@@ -29,23 +29,14 @@ isPalindrome('топот');
 
 function getNumbers (value) {
   let result = '';
-  if (typeof value === 'string') {
-    const modifiedValue = value.replaceAll(' ', '');
-    for (let i = 0; i < modifiedValue.length; i++) {
-      if (!isNaN(Number(modifiedValue[i]))) {
-        result += Number(modifiedValue[i]);
-      }
-    }
-  } else {
-    const modifiedValue = value.toString();
-    for (let i = 0; i < modifiedValue.length; i++) {
-      if (!isNaN(Number(modifiedValue[i]))) {
-        result += Number(modifiedValue[i]);
-      }
+  const modifiedValue = value.toString().replaceAll(' ', '');
+  for (let i = 0; i < modifiedValue.length; i++) {
+    if (!isNaN(Number(modifiedValue[i]))) {
+      result += Number(modifiedValue[i]);
     }
   }
 
-  return result.length > 0 ? parseInt(result, 10) : 'NaN';
+  return result.length > 0 ? parseInt(result, 10) : NaN;
 }
 
 getNumbers('ECMAScript 2022');
