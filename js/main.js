@@ -14,6 +14,11 @@ const CommentsCount = {
   MAX: 30
 };
 
+const CommentsIdNumber = {
+  MIN: 1,
+  MAX: 1000
+};
+
 const USERS_NAMES = [
   'Иван',
   'Хуан Себастьян',
@@ -63,13 +68,22 @@ const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0,
 // создаем комментарий
 
 const createComment = () => {
-  let id = 1;
-  return () => ({
-    id: id++,
-    avatar: `img/avatar-${getRandomPositiveInteger(AvatarsNumber.MIN, AvatarsNumber.MAX)}.svg`,
-    message: getRandomArrayElement(COMMENTS),
-    name: getRandomArrayElement(USERS_NAMES),
-  });
+  const commentsIDs = [];
+
+  return () => {
+    let currentID = getRandomPositiveInteger(CommentsIdNumber.MIN, CommentsIdNumber.MAX);
+    while (commentsIDs.includes(currentID)) {
+      currentID = getRandomPositiveInteger(CommentsIdNumber.MIN, CommentsIdNumber.MAX);
+    }
+    commentsIDs.push(currentID);
+
+    return {
+      id: currentID,
+      avatar: `img/avatar-${getRandomPositiveInteger(AvatarsNumber.MIN, AvatarsNumber.MAX)}.svg`,
+      message: getRandomArrayElement(COMMENTS),
+      name: getRandomArrayElement(USERS_NAMES),
+    };
+  };
 };
 
 
@@ -77,16 +91,13 @@ const createComment = () => {
 
 const createPhoto = () => {
   let id = 0;
-  return () => {
-    id++;
-    return ({
-      id: id,
-      url: `photos/${id}.jpg`,
-      description: getRandomArrayElement(DESCRIPTIONS),
-      likes: getRandomPositiveInteger(LikesCount.MIN, LikesCount.MAX),
-      comments: Array.from({length: getRandomPositiveInteger(CommentsCount.MIN, CommentsCount.MAX)}, createComment())
-    });
-  };
+  return () => ({
+    id: id++,
+    url: `photos/${id}.jpg`,
+    description: getRandomArrayElement(DESCRIPTIONS),
+    likes: getRandomPositiveInteger(LikesCount.MIN, LikesCount.MAX),
+    comments: Array.from({length: getRandomPositiveInteger(CommentsCount.MIN, CommentsCount.MAX)}, createComment())
+  });
 };
 
 // генерируем массив фотографий
