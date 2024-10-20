@@ -1,23 +1,29 @@
 import {generatePhotos} from './data.js';
 import {PHOTOS_COUNT} from './const.js';
-
-const similarThumbnails = generatePhotos(PHOTOS_COUNT);
+import { findTemplate } from './util.js';
 
 const thumbnailsContainerElement = document.querySelector('.pictures');
-const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const thumbnailTemplate = findTemplate('picture');
 
 const thumbnailsFragment = document.createDocumentFragment();
 
-similarThumbnails.forEach(({url, description, comments, likes}) => {
-  const newThumbnail = thumbnailTemplate.cloneNode(true);
+const createThumbnail = (photo) => {
+  const thumbnail = thumbnailTemplate.cloneNode(true);
 
-  const newThumbnailImage = newThumbnail.querySelector('.picture__img');
-  newThumbnailImage.src = url;
-  newThumbnailImage.alt = description;
+  const thumbnailImage = thumbnail.querySelector('.picture__img');
+  thumbnailImage.src = photo.url;
+  thumbnailImage.alt = photo.description;
 
-  newThumbnail.querySelector('.picture__comments').textContent = comments.length;
-  newThumbnail.querySelector('.picture__likes').textContent = likes;
+  thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
+  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
 
+  return thumbnail;
+};
+
+const similarPhotos = generatePhotos(PHOTOS_COUNT);
+
+similarPhotos.forEach((photo) => {
+  const newThumbnail = createThumbnail(photo);
   thumbnailsFragment.append(newThumbnail);
 });
 
