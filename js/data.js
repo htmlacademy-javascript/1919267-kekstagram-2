@@ -6,7 +6,7 @@ const createComment = () => {
 
   return () => {
     let currentID = getRandomPositiveInteger(MinMaxValues.COMMENTS_ID_MIN, MinMaxValues.COMMENTS_ID_MAX);
-    while (commentsIDs.includes(currentID)) {
+    if (commentsIDs.includes(currentID)) {
       currentID = getRandomPositiveInteger(MinMaxValues.COMMENTS_ID_MIN, MinMaxValues.COMMENTS_ID_MIN);
     }
     commentsIDs.push(currentID);
@@ -22,6 +22,7 @@ const createComment = () => {
 
 const createPhoto = () => {
   let id = 0;
+
   return () => ({
     id: id++,
     url: `photos/${id}.jpg`,

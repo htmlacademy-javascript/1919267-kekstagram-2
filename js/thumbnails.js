@@ -1,11 +1,6 @@
-import {generatePhotos} from './data.js';
-import {PHOTOS_COUNT} from './const.js';
 import { findTemplate } from './util.js';
 
-const thumbnailsContainerElement = document.querySelector('.pictures');
 const thumbnailTemplate = findTemplate('picture');
-
-const thumbnailsFragment = document.createDocumentFragment();
 
 const createThumbnail = (photo) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
@@ -20,11 +15,16 @@ const createThumbnail = (photo) => {
   return thumbnail;
 };
 
-const similarPhotos = generatePhotos(PHOTOS_COUNT);
+const renderThumbnails = (array) => {
+  const thumbnailsContainerElement = document.querySelector('.pictures');
+  const thumbnailsFragment = document.createDocumentFragment();
 
-similarPhotos.forEach((photo) => {
-  const newThumbnail = createThumbnail(photo);
-  thumbnailsFragment.append(newThumbnail);
-});
+  array.forEach((photo) => {
+    const newThumbnail = createThumbnail(photo);
+    thumbnailsFragment.append(newThumbnail);
+  });
 
-thumbnailsContainerElement.append(thumbnailsFragment);
+  thumbnailsContainerElement.append(thumbnailsFragment);
+};
+
+export {renderThumbnails};
