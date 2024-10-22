@@ -1,6 +1,8 @@
-import { PHOTOS_COUNT } from './const.js';
-import { generatePhotos } from './data.js';
+import './thumbnails.js';
+import {generatePhotos} from './data.js';
+import {PHOTOS_COUNT} from './const.js';
+import { renderThumbnails } from './thumbnails.js';
 
-//console.log(
-generatePhotos(PHOTOS_COUNT);
-//);
+const similarPhotos = generatePhotos(PHOTOS_COUNT);
+
+renderThumbnails(similarPhotos);
