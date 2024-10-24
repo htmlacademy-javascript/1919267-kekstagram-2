@@ -1,6 +1,9 @@
-import { findTemplate } from './util.js';
+import { openFullPhoto } from './full-photo.js';
+import { findTemplate, renderItems } from './util.js';
 
 const thumbnailTemplate = findTemplate('picture');
+const thumbnailsContainerElement = document.querySelector('.pictures');
+let thumbnails = [];
 
 const createThumbnail = (photo) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
@@ -8,23 +11,26 @@ const createThumbnail = (photo) => {
   const thumbnailImage = thumbnail.querySelector('.picture__img');
   thumbnailImage.src = photo.url;
   thumbnailImage.alt = photo.description;
-
+  thumbnail.dataset.photoId = photo.id;
   thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
   thumbnail.querySelector('.picture__likes').textContent = photo.likes;
 
   return thumbnail;
 };
 
-const renderThumbnails = (array) => {
-  const thumbnailsContainerElement = document.querySelector('.pictures');
-  const thumbnailsFragment = document.createDocumentFragment();
+const getCurrentPhoto = (photoId) => thumbnails.find((item) => item.id === parseInt(photoId, 10));
 
-  array.forEach((photo) => {
-    const newThumbnail = createThumbnail(photo);
-    thumbnailsFragment.append(newThumbnail);
-  });
-
-  thumbnailsContainerElement.append(thumbnailsFragment);
+const thumbnailClickHandler = (evt) => {
+  if(evt.target.closest('img')) {
+    const photoId = evt.target.parentNode.dataset.photoId;
+    openFullPhoto(getCurrentPhoto(photoId));
+  }
 };
 
-export {renderThumbnails};
+const initThumbnails = (photos) => {
+  thumbnails = photos;
+  thumbnailsContainerElement.addEventListener('click', thumbnailClickHandler);
+  renderItems(photos, thumbnailsContainerElement, createThumbnail);
+};
+
+export {initThumbnails};

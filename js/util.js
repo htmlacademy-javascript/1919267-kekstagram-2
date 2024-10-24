@@ -30,4 +30,14 @@ const findTemplate = (id) => {
   return template.content.firstElementChild;
 };
 
-export {getRandomPositiveInteger, getRandomArrayElement, findTemplate};
+const renderItems = (array, container, createItem) => {
+  const fragment = document.createDocumentFragment();
+  array.forEach((item) => {
+    const newItem = createItem(item);
+    fragment.append(newItem);
+  });
+
+  container.append(fragment);
+};
+
+export {getRandomPositiveInteger, getRandomArrayElement, findTemplate, renderItems};
