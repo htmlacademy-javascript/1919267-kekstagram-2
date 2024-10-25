@@ -45,4 +45,6 @@ const COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
-export {PHOTOS_COUNT, MinMaxValues, USERS_NAMES, DESCRIPTIONS, COMMENTS};
+const RENDER_COMMENTS_STEP = 5;
+
+export {PHOTOS_COUNT, MinMaxValues, USERS_NAMES, DESCRIPTIONS, COMMENTS, RENDER_COMMENTS_STEP};
