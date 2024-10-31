@@ -1,3 +1,5 @@
+import { addFormValidation } from './upload-form-validation.js';
+
 const uploadFormElement = document.querySelector('#upload-select-image');
 const uploadFileInputElement = uploadFormElement.querySelector('#upload-file');
 const uploadCancelButtonElement = uploadFormElement.querySelector('#upload-cancel');
@@ -7,6 +9,7 @@ const openUploadForm = () => {
   imageUploadOverlayElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', escapeKeyDownHandler);
+  addFormValidation();
 };
 
 const closeUploadForm = () => {
