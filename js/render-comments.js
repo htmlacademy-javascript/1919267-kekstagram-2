@@ -1,5 +1,5 @@
 import { RENDER_COMMENTS_STEP } from './const.js';
-import { renderItems } from './util';
+import { renderItems } from './util.js';
 
 let currentCommentsCount = 0;
 let comments = [];
@@ -9,6 +9,7 @@ const commentsListElement = fullPhotoElement.querySelector('.social__comments');
 const commentElement = commentsListElement.querySelector('.social__comment');
 const loadMoreButtonElement = fullPhotoElement.querySelector('.comments-loader');
 const commentsShownCountElement = fullPhotoElement.querySelector('.social__comment-shown-count');
+const commentsCountContentElement = fullPhotoElement.querySelector('.social__comment-count');
 commentsListElement.innerHTML = '';
 
 const createComment = (comment) => {
@@ -23,13 +24,19 @@ const createComment = (comment) => {
 };
 
 const renderNextComments = () => {
-  if (comments.length === 0) {
-    fullPhotoElement.querySelector('.social__comment-count').innerHTML = `<span
-    class="social__comment-total-count">${comments.length}</span> комментариев`;
-  }
   const commentsShown = comments.slice(currentCommentsCount, currentCommentsCount + RENDER_COMMENTS_STEP);
   const shownCommentsLength = commentsShown.length + currentCommentsCount;
   commentsShownCountElement.textContent = shownCommentsLength;
+
+  if (comments.length === 0) {
+    commentsCountContentElement.innerHTML = `<span
+    class="social__comment-total-count">${comments.length}</span> комментариев`;
+  } else {
+    commentsCountContentElement.innerHTML = `
+    <span class="social__comment-shown-count">${shownCommentsLength}</span> из <span
+    class="social__comment-total-count">${comments.length}</span> комментариев
+    `;
+  }
 
   renderItems(commentsShown, commentsListElement, createComment);
 
