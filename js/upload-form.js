@@ -28,5 +28,10 @@ function escapeKeyDownHandler (evt) {
   }
 }
 
-uploadFileInputElement.addEventListener('change', openUploadForm);
+const inputUploadChangeHandler = () => {
+  uploadFileInputElement.addEventListener('change', openUploadForm);
+};
+
 uploadCancelButtonElement.addEventListener('click', closeUploadForm);
+
+export {inputUploadChangeHandler, closeUploadForm, openUploadForm};

@@ -1,3 +1,6 @@
+import { addErrorMessageHandlers, addSuccessMessageHandlers, createErrorMessage, createSuccessMessage } from './dialog-messages.js';
+import { closeUploadForm } from './upload-form.js';
+
 const MAX_NUMBER_OF_HASHTAGS = 5;
 const HASHTAG_MAX_LENGTH = 20;
 const MAX_IMAGE__DESCRIPTION__LENGTH = 140;
@@ -88,7 +91,12 @@ const addFormValidation = () => {
     const isValidFrom = pristine.validate();
 
     if (isValidFrom) {
-      uploadFormElement.submit();
+      closeUploadForm();
+      createSuccessMessage();
+      addSuccessMessageHandlers();
+    } else {
+      createErrorMessage();
+      addErrorMessageHandlers();
     }
   });
 };
