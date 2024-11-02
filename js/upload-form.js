@@ -1,4 +1,5 @@
-import { addImagePreviewScale } from "./photo-effects";
+import { addEffectsToPreviewImage } from './photo-effects.js';
+import { addImagePreviewScale } from './photo-scale.js';
 
 const uploadFormElement = document.querySelector('#upload-select-image');
 const uploadFileInputElement = uploadFormElement.querySelector('#upload-file');
@@ -10,6 +11,7 @@ const openUploadForm = () => {
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', escapeKeyDownHandler);
   addImagePreviewScale();
+  addEffectsToPreviewImage();
 };
 
 const closeUploadForm = () => {
