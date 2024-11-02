@@ -1,5 +1,6 @@
 import { addErrorMessageHandlers, addSuccessMessageHandlers, createErrorMessage, createSuccessMessage } from './dialog-messages.js';
 import { closeUploadForm } from './upload-form.js';
+import { getArrayFromString } from './util.js';
 
 const MAX_NUMBER_OF_HASHTAGS = 5;
 const HASHTAG_MAX_LENGTH = 20;
@@ -15,6 +16,7 @@ const photoDescriptionInputElement = uploadFormElement.querySelector('.text__des
 const pristine = new Pristine(uploadFormElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error'
 });
 
 const validateHashtagContent = (value) => {
@@ -22,8 +24,7 @@ const validateHashtagContent = (value) => {
     return true;
   }
 
-  const arrayOfMessages = value.trim().split(/\s+/);
-  return arrayOfMessages.every((item) => REG_EXP.test(item));
+  return getArrayFromString(value).every((item) => REG_EXP.test(item));
 };
 
 const isValidLength = (value) => {
@@ -31,24 +32,16 @@ const isValidLength = (value) => {
     return true;
   }
 
-  const arrayOfMessages = value.trim().split(/\s+/);
-  return arrayOfMessages.every((item) => item.length <= HASHTAG_MAX_LENGTH);
+  return getArrayFromString(value).every((item) => item.length <= HASHTAG_MAX_LENGTH);
 };
 
-const checkNumberOfHashtags = (value) => {
-  const arrayOfMessages = value.trim().split(/\s+/);
-  return arrayOfMessages.length <= MAX_NUMBER_OF_HASHTAGS;
-};
+const checkNumberOfHashtags = (value) => getArrayFromString(value).length <= MAX_NUMBER_OF_HASHTAGS;
 
-const findSameElements = (value) => {
-  const arrayOfMessages = value.trim().toLowerCase().split(/\s+/);
-  return arrayOfMessages.every((item, index, array) => array.slice(index + 1, array.length).every((elem) => elem !== item));
-};
+const findSameElements = (value) => getArrayFromString(value)
+  .every((item, index, array) => array.slice(index + 1, array.length)
+    .every((elem) => elem !== item));
 
-const checkEmptyTags = (value) => {
-  const re = /^#\s+/;
-  return !re.test(value);
-};
+const checkEmptyTags = (value) => !value.endsWith('# ');
 
 const checkSpaces = (value) => {
   const re = /[0-9a-z_]#$/;
@@ -75,7 +68,7 @@ const addFormValidation = () => {
 
   pristine.addValidator(hashtagsInputElement, validateHashtagContent, 'Хэш-тег после # должен состоять только из букв и цифр', false);
 
-  pristine.addValidator(hashtagsInputElement, checkEmptyTags, 'Хеш-теги не должны состоять только из #', false);
+  pristine.addValidator(hashtagsInputElement, checkEmptyTags, 'Хеш-теги не должны состоять только из #', 1, true);
 
   pristine.addValidator(hashtagsInputElement, isValidLength, `Длина хеш-тега должна быть не более ${HASHTAG_MAX_LENGTH} символов`, true);
 
@@ -91,6 +84,7 @@ const addFormValidation = () => {
     const isValidFrom = pristine.validate();
 
     if (isValidFrom) {
+      hashtagsInputElement.value = hashtagsInputElement.value.trim().replaceAll(/\s+/g, ' ');
       closeUploadForm();
       createSuccessMessage();
       addSuccessMessageHandlers();

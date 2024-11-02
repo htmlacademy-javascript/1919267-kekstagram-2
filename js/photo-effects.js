@@ -1,18 +1,10 @@
 // Константы для наложения эффекта на изображение
-const EFFECT_NAMES = {
-  'chrome': 'grayscale',
-  'sepia': 'sepia',
-  'marvin': 'invert',
-  'phobos': 'blur',
-  'heat': 'brightness',
-};
-
 const EFFECT_PARAMETERS = {
-  'chrome': {range: {min: 0, max: 1}, step: 0.1, start: 1},
-  'sepia': {range: {min: 0, max: 1}, step: 0.1, start: 1},
-  'marvin': {range: {min: 0, max: 100}, step: 1, start: 100},
-  'phobos': {range: {min: 0, max: 3}, step: 0.1, start: 3},
-  'heat': {range: {min: 1, max: 3}, step: 0.1, start: 3},
+  'chrome': {range: {min: 0, max: 1}, step: 0.1, start: 1, style: 'grayscale', unit: ''},
+  'sepia': {range: {min: 0, max: 1}, step: 0.1, start: 1, style: 'sepia', unit: ''},
+  'marvin': {range: {min: 0, max: 100}, step: 1, start: 100, style: 'invert', unit: '%'},
+  'phobos': {range: {min: 0, max: 3}, step: 0.1, start: 3, style: 'blur', unit: 'px'},
+  'heat': {range: {min: 1, max: 3}, step: 0.1, start: 3, style: 'brightness', unit: ''},
 };
 
 const uploadFormElement = document.querySelector('#upload-select-image');
@@ -59,18 +51,10 @@ const hideSlider = () => {
 };
 
 const addEffectFilterToPreview = (filter, filterValue) => {
-  if (filter === 'marvin') {
-    imageUploadPreviewElement.style.filter = `${EFFECT_NAMES[filter]}(${filterValue}%)`;
-    effectLevelValueInputElement.value = `${filterValue}%`;
-  } else {
-    if (filter === 'phobos') {
-      imageUploadPreviewElement.style.filter = `${EFFECT_NAMES[filter]}(${filterValue}px)`;
-      effectLevelValueInputElement.value = `${filterValue}px`;
-    } else {
-      imageUploadPreviewElement.style.filter = `${EFFECT_NAMES[filter]}(${filterValue})`;
-      effectLevelValueInputElement.value = `${filterValue}`;
-    }
-  }
+  const filterName = EFFECT_PARAMETERS[filter].style;
+  const filterUnit = EFFECT_PARAMETERS[filter].unit;
+  imageUploadPreviewElement.style.filter = `${filterName}(${filterValue}${filterUnit})`;
+  effectLevelValueInputElement.value = `${filterValue}${filterUnit}`;
 };
 
 const addSlider = (item) => {
@@ -79,7 +63,7 @@ const addSlider = (item) => {
   } else {
     effectLevelSliderElement.noUiSlider.updateOptions(EFFECT_PARAMETERS[`${item.value}`]);
     showSlider();
-    addEffectFilterToPreview();
+    addEffectFilterToPreview(item.value, effectLevelSliderElement.noUiSlider.get());
     addClassToPreviewImage(item.value);
     effectLevelValueInputElement.value = effectLevelSliderElement.noUiSlider.get();
     effectLevelSliderElement.noUiSlider.on('update', () => {

@@ -1,5 +1,4 @@
 import { findTemplate } from './util.js';
-import { inputUploadChangeHandler } from './upload-form.js';
 
 const successMessageTemplate = findTemplate('success');
 const errorMessageTemplate = findTemplate('error');
@@ -46,8 +45,10 @@ const createErrorMessage = () => {
 };
 
 const removeErrorMessage = () => {
-  errorMessageElement.remove();
   document.removeEventListener('keydown', escKeydownOnErrorMessageHandler);
+  errorButtonElement.removeEventListener('click', removeErrorMessage);
+  window.removeEventListener('click', removeErrorMessage);
+  errorMessageElement.remove();
 };
 
 const errorMessageElementHandler = (evt) => {
@@ -57,7 +58,7 @@ const errorMessageElementHandler = (evt) => {
 };
 
 const addErrorMessageHandlers = () => {
-  errorButtonElement.addEventListener('click', inputUploadChangeHandler);
+  errorButtonElement.addEventListener('click', removeErrorMessage);
   errorMessageElement.addEventListener('click', errorMessageElementHandler);
   document.addEventListener('keydown', escKeydownOnErrorMessageHandler);
   window.addEventListener('click', removeErrorMessage);
