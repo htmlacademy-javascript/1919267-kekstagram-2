@@ -1,4 +1,4 @@
-import { addFormValidation } from './upload-form-validation.js';
+import { addImagePreviewScale } from "./photo-effects";
 
 const uploadFormElement = document.querySelector('#upload-select-image');
 const uploadFileInputElement = uploadFormElement.querySelector('#upload-file');
@@ -9,7 +9,7 @@ const openUploadForm = () => {
   imageUploadOverlayElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', escapeKeyDownHandler);
-  addFormValidation();
+  addImagePreviewScale();
 };
 
 const closeUploadForm = () => {
