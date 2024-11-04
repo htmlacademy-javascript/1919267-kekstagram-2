@@ -1,4 +1,4 @@
-import { addEffectsToPreviewImage } from './photo-effects.js';
+import { initEffect, resetEffect } from './photo-effects.js';
 import { addImagePreviewScale } from './photo-scale.js';
 
 const uploadFormElement = document.querySelector('#upload-select-image');
@@ -16,7 +16,7 @@ const initUploadForm = () => {
     uploadCancelButtonElement.addEventListener('click', closeUploadForm);
   });
   addImagePreviewScale();
-  addEffectsToPreviewImage();
+  initEffect();
 };
 
 function closeUploadForm () {
@@ -26,6 +26,7 @@ function closeUploadForm () {
   uploadCancelButtonElement.removeEventListener('click', closeUploadForm);
   uploadFileInputElement.value = '';
   uploadFormElement.reset();
+  resetEffect();
 }
 
 function escapeKeyDownHandler (evt) {

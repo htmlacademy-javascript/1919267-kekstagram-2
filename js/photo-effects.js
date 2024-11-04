@@ -1,10 +1,11 @@
 // Константы для наложения эффекта на изображение
-const EFFECT_PARAMETERS = {
-  'chrome': {range: {min: 0, max: 1}, step: 0.1, start: 1, style: 'grayscale', unit: ''},
-  'sepia': {range: {min: 0, max: 1}, step: 0.1, start: 1, style: 'sepia', unit: ''},
-  'marvin': {range: {min: 0, max: 100}, step: 1, start: 100, style: 'invert', unit: '%'},
-  'phobos': {range: {min: 0, max: 3}, step: 0.1, start: 3, style: 'blur', unit: 'px'},
-  'heat': {range: {min: 1, max: 3}, step: 0.1, start: 3, style: 'brightness', unit: ''},
+const Effects = {
+  CHROME: {range: {min: 0, max: 1}, step: 0.1, start: 1, style: 'grayscale', unit: ''},
+  SEPIA: {range: {min: 0, max: 1}, step: 0.1, start: 1, style: 'sepia', unit: ''},
+  MARVIN: {range: {min: 0, max: 100}, step: 1, start: 100, style: 'invert', unit: '%'},
+  PHOBOS: {range: {min: 0, max: 3}, step: 0.1, start: 3, style: 'blur', unit: 'px'},
+  HEAT: {range: {min: 1, max: 3}, step: 0.1, start: 3, style: 'brightness', unit: ''},
+  NONE: {range: {min: 0, max: 1}, step: 0.1, start: 1, style: 'none', unit: ''}
 };
 
 const uploadFormElement = document.querySelector('#upload-select-image');
@@ -14,75 +15,96 @@ const effectLevelValueInputElement = uploadFormElement.querySelector('.effect-le
 const effectLevelSliderElement = uploadFormElement.querySelector('.effect-level__slider');
 const imageUploadPreviewElement = uploadFormElement.querySelector('.img-upload__preview').querySelector('img');
 
+const defaultEffect = 'NONE';
+let currentEffect = defaultEffect;
+
 // добавление эффектов на изображение
-noUiSlider.create(effectLevelSliderElement, {
-  range: {
-    min: 0,
-    max: 1,
-  },
-  step: 0.1,
-  start: 1,
-  connect: 'lower',
-  format: {
-    to: (value) => {
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
-      return value.toFixed(1);
+function createSlider (effect) {
+  const {range, step, start} = effect;
+  noUiSlider.create(effectLevelSliderElement, {
+    range: {
+      min: range.min,
+      max: range.max,
     },
-    from: (value) => parseFloat(value),
-  },
-});
+    step,
+    start,
+    connect: 'lower',
+    format: {
+      to: (value) => {
+        if (Number.isInteger(value)) {
+          return value.toFixed(0);
+        }
+        return value.toFixed(1);
+      },
+      from: (value) => parseFloat(value),
+    },
+  });
+
+  effectLevelSliderElement.noUiSlider.on('update', sliderUpdateHandler);
+  hideSlider();
+}
+
+function setImageStyle (effectValue) {
+  if (currentEffect === defaultEffect) {
+    imageUploadPreviewElement.style.filter = null;
+  } else {
+    const style = Effects[currentEffect].style;
+    const unit = Effects[currentEffect].unit;
+    imageUploadPreviewElement.style.filter = `${style}(${effectValue}${unit})`;
+  }
+}
+
+function sliderUpdateHandler () {
+  const currentValue = effectLevelSliderElement.noUiSlider.get();
+  effectLevelValueInputElement.value = currentValue;
+  setImageStyle(currentValue);
+}
+
+function effectsListElementChangeHandler (evt) {
+  const effect = evt.target.value.toUpperCase();
+  setEffect(effect);
+}
 
 const showSlider = () => {
   effectLevelSliderElement.classList.remove('hidden');
   effectLevelFieldsetElement.classList.remove('hidden');
-  effectLevelValueInputElement.value = '';
 };
 
-const addClassToPreviewImage = (string) => {
-  imageUploadPreviewElement.classList.add(`effects__preview--${string}`);
-};
-
-const hideSlider = () => {
+function hideSlider () {
   effectLevelSliderElement.classList.add('hidden');
   effectLevelFieldsetElement.classList.add('hidden');
-  imageUploadPreviewElement.style.filter = '';
-};
+}
 
-const addEffectFilterToPreview = (filter, filterValue) => {
-  const filterName = EFFECT_PARAMETERS[filter].style;
-  const filterUnit = EFFECT_PARAMETERS[filter].unit;
-  imageUploadPreviewElement.style.filter = `${filterName}(${filterValue}${filterUnit})`;
-  effectLevelValueInputElement.value = `${filterValue}${filterUnit}`;
-};
-
-const addSlider = (item) => {
-  if (item.value === 'none') {
+function setEffect (effect) {
+  currentEffect = effect;
+  if (currentEffect === defaultEffect) {
     hideSlider();
   } else {
-    effectLevelSliderElement.noUiSlider.updateOptions(EFFECT_PARAMETERS[`${item.value}`]);
     showSlider();
-    addEffectFilterToPreview(item.value, effectLevelSliderElement.noUiSlider.get());
-    addClassToPreviewImage(item.value);
-    effectLevelValueInputElement.value = effectLevelSliderElement.noUiSlider.get();
-    effectLevelSliderElement.noUiSlider.on('update', () => {
-      addEffectFilterToPreview(item.value, effectLevelSliderElement.noUiSlider.get());
-    });
   }
-};
+  setSliderOptions();
+}
 
-const addEffectsToPreviewImage = () => {
-  effectLevelFieldsetElement.classList.add('hidden');
-  imageUploadPreviewElement.style.filter = '';
-  imageUploadPreviewElement.removeAttribute('class');
-  imageUploadPreviewElement.classList.add('effects__preview--none');
-  listOfEffectsContainer.addEventListener('change', (evt) => {
-    if (evt.target.name === 'effect') {
-      imageUploadPreviewElement.removeAttribute('class');
-      addSlider(evt.target);
-    }
+function setSliderOptions () {
+  const {range, step} = Effects[currentEffect];
+  effectLevelSliderElement.noUiSlider.updateOptions({
+    range: {
+      min: range.min,
+      max: range.max,
+    },
+    start: range.max,
+    step,
   });
+}
+
+const initEffect = () => {
+  createSlider(Effects[defaultEffect]);
+  listOfEffectsContainer.addEventListener('change', effectsListElementChangeHandler);
 };
 
-export {addEffectsToPreviewImage};
+function resetEffect () {
+  listOfEffectsContainer.querySelector('input[type="radio"]:first-child').checked = true;
+  setEffect(defaultEffect);
+}
+
+export {initEffect, resetEffect};
