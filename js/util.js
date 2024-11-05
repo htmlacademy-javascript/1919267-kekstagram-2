@@ -40,4 +40,6 @@ const renderItems = (array, container, createItem) => {
   container.append(fragment);
 };
 
-export {getRandomPositiveInteger, getRandomArrayElement, findTemplate, renderItems};
+const getArrayFromString = (string) => string.trim().toLowerCase().split(/\s+/);
+
+export {getRandomPositiveInteger, getRandomArrayElement, findTemplate, renderItems, getArrayFromString};
