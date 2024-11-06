@@ -1,19 +1,4 @@
-//Функция для проверки длины строки
-
-function checkStringLength (string, maxLength) {
-  return string.length <= maxLength;
-}
-
-checkStringLength('проверяемая строка', 20);
-
-const getRandomPositiveInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
-
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+import { ALERT_SHOW_TIME } from './const.js';
 
 //функция для нахождения шаблома в разметке
 const findTemplate = (id) => {
@@ -30,6 +15,7 @@ const findTemplate = (id) => {
   return template.content.firstElementChild;
 };
 
+//функция отрисовки элементов массива в фрагмент
 const renderItems = (array, container, createItem) => {
   const fragment = document.createDocumentFragment();
   array.forEach((item) => {
@@ -42,4 +28,25 @@ const renderItems = (array, container, createItem) => {
 
 const getArrayFromString = (string) => string.trim().toLowerCase().split(/\s+/);
 
-export {getRandomPositiveInteger, getRandomArrayElement, findTemplate, renderItems, getArrayFromString};
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
+export {findTemplate, renderItems, getArrayFromString, showAlert};
