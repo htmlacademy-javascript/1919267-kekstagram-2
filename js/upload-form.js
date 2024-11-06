@@ -1,5 +1,5 @@
 import { initEffect, resetEffect } from './photo-effects.js';
-import { addImagePreviewScale } from './photo-scale.js';
+import { addImagePreviewScale, resetScale } from './photo-scale.js';
 
 const uploadFormElement = document.querySelector('#upload-select-image');
 const uploadFileInputElement = uploadFormElement.querySelector('#upload-file');
@@ -27,6 +27,7 @@ function closeUploadForm () {
   uploadFileInputElement.value = '';
   uploadFormElement.reset();
   resetEffect();
+  resetScale();
 }
 
 function escapeKeyDownHandler (evt) {
