@@ -1,3 +1,4 @@
+import { sendData } from './api.js';
 import { addErrorMessageHandlers, addSuccessMessageHandlers, createErrorMessage, createSuccessMessage } from './dialog-messages.js';
 import { closeUploadForm } from './upload-form.js';
 import { getArrayFromString } from './util.js';
@@ -10,6 +11,7 @@ const REG_EXP = /^#[a-zа-яё0-9]*$/i;
 const uploadFormElement = document.querySelector('#upload-select-image');
 const hashtagsInputElement = uploadFormElement.querySelector('.text__hashtags');
 const photoDescriptionInputElement = uploadFormElement.querySelector('.text__description');
+const submitButtonElement = uploadFormElement.querySelector('.img-upload__submit');
 
 // Функции для валидации хештегов
 
@@ -77,20 +79,41 @@ const addFormValidation = () => {
   pristine.addValidator(photoDescriptionInputElement, (text) => text.length < MAX_IMAGE__DESCRIPTION__LENGTH, `Длина комментария не может быть больше ${MAX_IMAGE__DESCRIPTION__LENGTH} символов`);
 
   // Отправка формы
+  const blockSubmitButton = () => {
+    submitButtonElement.disabled = true;
+    submitButtonElement.textContent = 'Публикую...';
+  };
+
+  const unblockSubmitButton = () => {
+    submitButtonElement.disabled = false;
+    submitButtonElement.textContent = 'Опубликовать';
+  };
 
   uploadFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    const isValidFrom = pristine.validate();
+    const isValidForm = pristine.validate();
 
-    if (isValidFrom) {
+    if (isValidForm) {
       hashtagsInputElement.value = hashtagsInputElement.value.trim().replaceAll(/\s+/g, ' ');
-      closeUploadForm();
-      createSuccessMessage();
-      addSuccessMessageHandlers();
-    } else {
-      createErrorMessage();
-      addErrorMessageHandlers();
+      const formData = new FormData(uploadFormElement);
+
+      blockSubmitButton();
+
+      sendData(
+        () => {
+          unblockSubmitButton();
+          closeUploadForm();
+          createSuccessMessage();
+          addSuccessMessageHandlers();
+        },
+        () => {
+          unblockSubmitButton();
+          createErrorMessage();
+          addErrorMessageHandlers();
+        },
+        formData
+      );
     }
   });
 };
