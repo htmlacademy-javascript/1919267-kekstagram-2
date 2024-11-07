@@ -1,5 +1,6 @@
 import { initEffect, resetEffect } from './photo-effects.js';
 import { addImagePreviewScale, resetScale } from './photo-scale.js';
+import { resetValidation } from './upload-form-validation.js';
 
 const uploadFormElement = document.querySelector('#upload-select-image');
 const uploadFileInputElement = uploadFormElement.querySelector('#upload-file');
@@ -26,6 +27,7 @@ function closeUploadForm () {
   uploadCancelButtonElement.removeEventListener('click', closeUploadForm);
   uploadFileInputElement.value = '';
   uploadFormElement.reset();
+  resetValidation();
   resetEffect();
   resetScale();
 }
