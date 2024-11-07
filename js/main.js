@@ -1,14 +1,15 @@
-import './thumbnails.js';
-import './upload-form.js';
-import {generatePhotos} from './data.js';
-import {PHOTOS_COUNT} from './const.js';
 import { initThumbnails } from './thumbnails.js';
 import {initUploadForm} from './upload-form.js';
 import { addFormValidation } from './upload-form-validation.js';
+import { getData } from './api.js';
+import { showAlert } from './util.js';
 
-const similarPhotos = generatePhotos(PHOTOS_COUNT);
+getData()
+  .then((dataFromServer) => {
+    initThumbnails(dataFromServer);
+  })
+  .catch((error) => {
+    showAlert(error.message);
+  });
 initUploadForm();
 addFormValidation();
-
-initThumbnails(similarPhotos);
-

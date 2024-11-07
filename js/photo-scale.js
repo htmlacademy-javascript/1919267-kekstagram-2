@@ -34,17 +34,15 @@ const makeScaleValueSmaller = () => {
   }
 };
 
-const scaleToDefault = () => {
+const resetScale = () => {
   imageUploadPreviewElement.style.transform = `scale(${DEFAULT_SCALE_VALUE / 100})`;
   scaleValueInputElement.value = `${DEFAULT_SCALE_VALUE}%`;
   scaleValue = DEFAULT_SCALE_VALUE;
 };
 
 const addImagePreviewScale = () => {
-  scaleToDefault();
-
   scaleBiggerButtonElement.addEventListener('click', makeScaleValueBigger);
   scaleSmallerButtonElement.addEventListener('click', makeScaleValueSmaller);
 };
 
-export {addImagePreviewScale};
+export {addImagePreviewScale, resetScale};
