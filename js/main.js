@@ -8,8 +8,8 @@ getData(
   (dataFromServer) => {
     initThumbnails(dataFromServer);
   },
-  () => {
-    showAlert('Упс! Данные не подгрузились :( Попробуйте позже!');
+  (error) => {
+    showAlert(error);
   }
 );
 initUploadForm();

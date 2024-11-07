@@ -1,36 +1,21 @@
+import { BASE_URL, ErrorText, Method, Route } from './const.js';
+
 const getData = (onSuccess, onFail) => {
-  fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
-    .then((response) => {
-      if (response.ok) {
-        response.json()
-          .then((data) => {
-            onSuccess(data);
-          });
-      } else {
-        onFail();
-      }
-    })
-    .catch(() => {
-      onFail();
-    });
+  fetch(`${BASE_URL}${Route.GET_DATA}`)
+    .then((response) => response.ok ? response.json() : onFail(ErrorText[Method.GET]))
+    .then((data) => onSuccess(data))
+    .catch(() => onFail(ErrorText[Method.GET]));
 };
 
 const sendData = (onSuccess, onFail, body) => {
-  fetch('https://31.javascript.htmlacademy.pro/kekstagram',
+  fetch(`${BASE_URL}${Route.SEND_DATA}`,
     {
-      method: 'POST',
+      method: Method.POST,
       body,
     })
-    .then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
-        onFail();
-      }
-    })
-    .catch(() => {
-      onFail();
-    });
+    .then((response) => response.ok ? response.json() : onFail(ErrorText[Method.GET]))
+    .then((data) => onSuccess(data))
+    .catch(() => onFail(ErrorText[Method.GET]));
 };
 
 export {getData, sendData};
