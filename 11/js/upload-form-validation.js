@@ -100,22 +100,21 @@ const addFormValidation = () => {
 
       blockSubmitButton();
 
-      sendData(
-        () => {
-          unblockSubmitButton();
+      sendData(formData)
+        .then(() => {
           closeUploadForm();
           createSuccessMessage();
           addSuccessMessageHandlers();
-        },
-        () => {
-          unblockSubmitButton();
+        })
+        .catch(() => {
           createErrorMessage();
           addErrorMessageHandlers();
-        },
-        formData
-      );
+        })
+        .finally(() => unblockSubmitButton());
     }
   });
 };
 
-export {addFormValidation};
+const resetValidation = () => pristine.reset();
+
+export {addFormValidation, resetValidation};

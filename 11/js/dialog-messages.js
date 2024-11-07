@@ -28,7 +28,7 @@ const successMessageElementHandler = (evt) => {
 const addSuccessMessageHandlers = () => {
   successButtonElement.addEventListener('click', removeSuccessMessage);
   successMessageElement.addEventListener('click', successMessageElementHandler);
-  document.addEventListener('keydown', escKeydownOnSuccessMessageHandler);
+  document.body.addEventListener('keydown', escKeydownOnSuccessMessageHandler);
   window.addEventListener('click', removeSuccessMessage);
 };
 
@@ -45,7 +45,7 @@ const createErrorMessage = () => {
 };
 
 const removeErrorMessage = () => {
-  document.removeEventListener('keydown', escKeydownOnErrorMessageHandler);
+  document.body.removeEventListener('keydown', escKeydownOnErrorMessageHandler);
   errorButtonElement.removeEventListener('click', removeErrorMessage);
   window.removeEventListener('click', removeErrorMessage);
   errorMessageElement.remove();
@@ -60,8 +60,8 @@ const errorMessageElementHandler = (evt) => {
 const addErrorMessageHandlers = () => {
   errorButtonElement.addEventListener('click', removeErrorMessage);
   errorMessageElement.addEventListener('click', errorMessageElementHandler);
-  document.addEventListener('keydown', escKeydownOnErrorMessageHandler);
-  window.addEventListener('click', removeErrorMessage);
+  document.body.addEventListener('keydown', escKeydownOnErrorMessageHandler);
+  document.addEventListener('click', removeErrorMessage);
 };
 
 // Функции нажатия ESC
@@ -74,8 +74,11 @@ function escKeydownOnSuccessMessageHandler (evt) {
 }
 
 function escKeydownOnErrorMessageHandler (evt) {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
+  evt.stopPropagation();
+  const existingElement = document.querySelector('.success') || document.querySelector('.error');
+  const closeButtonElement = existingElement.querySelector('button');
+
+  if (evt.target === existingElement || evt.target === closeButtonElement || evt.key === 'Escape') {
     removeErrorMessage();
   }
 }
