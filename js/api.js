@@ -1,21 +1,12 @@
 import { BASE_URL, ErrorText, Method, Route } from './const.js';
 
-const getData = (onSuccess, onFail) => {
-  fetch(`${BASE_URL}${Route.GET_DATA}`)
-    .then((response) => response.ok ? response.json() : onFail(ErrorText[Method.GET]))
-    .then((data) => onSuccess(data))
-    .catch(() => onFail(ErrorText[Method.GET]));
-};
+const load = (route, method = Method.GET, body = null) => fetch(`${BASE_URL}${route}`, {method, body})
+  .then((response) => response.ok
+    ? response.json()
+    : Promise.reject({message: ErrorText[method]}));
 
-const sendData = (onSuccess, onFail, body) => {
-  fetch(`${BASE_URL}${Route.SEND_DATA}`,
-    {
-      method: Method.POST,
-      body,
-    })
-    .then((response) => response.ok ? response.json() : onFail(ErrorText[Method.GET]))
-    .then((data) => onSuccess(data))
-    .catch(() => onFail(ErrorText[Method.GET]));
-};
+const getData = () => load(Route.GET_DATA);
+
+const sendData = (body) => load(Route.SEND_DATA, Method.POST, body);
 
 export {getData, sendData};

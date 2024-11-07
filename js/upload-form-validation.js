@@ -100,20 +100,18 @@ const addFormValidation = () => {
 
       blockSubmitButton();
 
-      sendData(
-        () => {
+      sendData(formData)
+        .then(() => {
           unblockSubmitButton();
           closeUploadForm();
           createSuccessMessage();
           addSuccessMessageHandlers();
-        },
-        () => {
+        })
+        .catch(() => {
           unblockSubmitButton();
           createErrorMessage();
           addErrorMessageHandlers();
-        },
-        formData
-      );
+        });
     }
   });
 };

@@ -4,13 +4,12 @@ import { addFormValidation } from './upload-form-validation.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
 
-getData(
-  (dataFromServer) => {
+getData()
+  .then((dataFromServer) => {
     initThumbnails(dataFromServer);
-  },
-  (error) => {
-    showAlert(error);
-  }
-);
+  })
+  .catch((error) => {
+    showAlert(error.message);
+  });
 initUploadForm();
 addFormValidation();
