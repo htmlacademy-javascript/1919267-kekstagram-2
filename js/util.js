@@ -1,4 +1,4 @@
-import { ALERT_SHOW_TIME, NUMBER_RANDOM_PHOTOS } from './const.js';
+import { ALERT_SHOW_TIME, NUMBER_RANDOM_PHOTOS, TIME_OUT_DELAY } from './const.js';
 
 //функция для нахождения шаблома в разметке
 const findTemplate = (id) => {
@@ -71,4 +71,15 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {findTemplate, renderItems, getArrayFromString, getRandomUniqueElements, showAlert};
+// Функция взята из интернета и доработана
+// Источник - https://www.freecodecamp.org/news/javascript-debounce-example
+
+const debounce = (callback, timeoutDelay = TIME_OUT_DELAY) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export {findTemplate, renderItems, getArrayFromString, getRandomUniqueElements, showAlert, debounce};

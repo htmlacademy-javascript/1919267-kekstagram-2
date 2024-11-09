@@ -1,5 +1,5 @@
 import { createThumbnail } from './thumbnails.js';
-import { getRandomUniqueElements, renderItems } from './util.js';
+import { debounce, getRandomUniqueElements, renderItems } from './util.js';
 
 const sectionFiltersElement = document.querySelector('.img-filters');
 const filterButtonElements = document.querySelectorAll('.img-filters__button');
@@ -38,14 +38,10 @@ const renderFilteredPhotos = (photos) => {
 };
 
 
-const filterButtonClickHandler = (target) => {
-  if (!target.classList.contains('img-filters__button')) {
-    return;
-  }
+const filterButtonClickHandler = debounce((target) => {
   deleteActiveClass();
   clearPhotosContainer();
   target.classList.add('img-filters__button--active');
-
   switch (target.id) {
     case 'filter-random':
       renderFilteredPhotos(filterPhotosByRandom());
@@ -56,7 +52,7 @@ const filterButtonClickHandler = (target) => {
     default:
       renderFilteredPhotos(filterPhotosByDefault());
   }
-};
+});
 
 const initFilters = (photos) => {
   photosForFilter = photos;
