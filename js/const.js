@@ -8,7 +8,7 @@ const TIME_OUT_DELAY = 500;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png', 'webp'];
 
-const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
+const BASE_URL = 'https://32.javascript.htmlacademy.pro/kekstagram';
 
 const Route = {
   GET_DATA: '/data',
@@ -21,7 +21,7 @@ const Method = {
 };
 
 const ErrorText = {
-  [Method.GET]: 'Не удалось загрузить данные',
+  [Method.GET]: 'Не удалось загрузить данные с сервера',
   [Method.POST]: 'Не удалось отправить данные'
 };
 
