@@ -13,19 +13,23 @@ const photoDescriptionInputElement = uploadFormElement.querySelector('.text__des
 const fileChooser = document.querySelector('.img-upload__input');
 const imageUploadPreviewElement = uploadFormElement.querySelector('.img-upload__preview').querySelector('img');
 
+const getFileUrl = () => {
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((fileExtension) => fileName.endsWith(fileExtension));
+  if (!matches) {
+    showAlert('Неверный формат изображения');
+    return;
+  }
+  return URL.createObjectURL(file);
+};
+
 const initUploadForm = () => {
   uploadFileInputElement.addEventListener('change', () => {
-    const file = fileChooser.files[0];
-    const fileName = file.name.toLowerCase();
-
-    const matches = FILE_TYPES.some((fileExtension) => fileName.endsWith(fileExtension));
-    if (!matches) {
-      showAlert('Неверный формат изображения');
-      return;
-    }
-    imageUploadPreviewElement.src = URL.createObjectURL(file);
+    const file = getFileUrl();
+    imageUploadPreviewElement.src = file;
     document.querySelectorAll('.effects__preview').forEach((element) => {
-      element.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
+      element.style.backgroundImage = `url('${file}')`;
     });
 
     imageUploadOverlayElement.classList.remove('hidden');
