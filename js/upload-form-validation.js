@@ -43,7 +43,7 @@ const findSameElements = (value) => getArrayFromString(value)
   .every((item, index, array) => array.slice(index + 1, array.length)
     .every((elem) => elem !== item));
 
-const checkEmptyTags = (value) => !value.endsWith('# ');
+const checkEmptyTags = (value) => !value.endsWith('#');
 
 const checkSpaces = (value) => {
   const re = /[0-9a-z_]#$/;
@@ -64,13 +64,13 @@ const addFormValidation = () => {
 
   pristine.addValidator(hashtagsInputElement, checkHashtagFirstSymbol, 'Хэш-тег должен начинаться с символа #', true);
 
+  pristine.addValidator(hashtagsInputElement, checkEmptyTags, 'Хеш-теги не должны состоять только из #', 1, true);
+
   pristine.addValidator(hashtagsInputElement, checkSpaces, 'Хеш-теги должны разделяться пробелами', false);
 
   pristine.addValidator(hashtagsInputElement, findSameElements, 'Хеш-теги не должны повторяться', false);
 
-  pristine.addValidator(hashtagsInputElement, validateHashtagContent, 'Хэш-тег после # должен состоять только из букв и цифр', false);
-
-  pristine.addValidator(hashtagsInputElement, checkEmptyTags, 'Хеш-теги не должны состоять только из #', 1, true);
+  pristine.addValidator(hashtagsInputElement, validateHashtagContent, 'Хэш-тег после # должен состоять только из букв и цифр', true);
 
   pristine.addValidator(hashtagsInputElement, isValidLength, `Длина хеш-тега должна быть не более ${HASHTAG_MAX_LENGTH} символов`, true);
 
