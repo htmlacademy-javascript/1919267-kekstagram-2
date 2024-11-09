@@ -1,4 +1,4 @@
-import { ALERT_SHOW_TIME } from './const.js';
+import { ALERT_SHOW_TIME, NUMBER_RANDOM_PHOTOS } from './const.js';
 
 //функция для нахождения шаблома в разметке
 const findTemplate = (id) => {
@@ -28,6 +28,28 @@ const renderItems = (array, container, createItem) => {
 
 const getArrayFromString = (string) => string.trim().toLowerCase().split(/\s+/);
 
+const getRandomPositiveInteger = (a, b) => {
+  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
+  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
+
+const getRandomUniqueElements = (array) => {
+  const newArray = array.slice();
+  const elements = [];
+  const newArrayLength = array.length;
+  for(let i = 0; i < newArrayLength; i++) {
+    const randomElement = getRandomPositiveInteger(0, newArray.length - 1);
+    elements.push(newArray[randomElement]);
+    newArray.splice(randomElement, 1);
+    if (elements.length >= NUMBER_RANDOM_PHOTOS) {
+      break;
+    }
+  }
+  return elements;
+};
+
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -49,4 +71,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {findTemplate, renderItems, getArrayFromString, showAlert};
+export {findTemplate, renderItems, getArrayFromString, getRandomUniqueElements, showAlert};
