@@ -32,15 +32,14 @@ const clearPhotosContainer = () => {
   });
 };
 
-const renderFilteredPhotos = (photos) => {
+const renderFilteredPhotos = debounce((photos) => {
   clearPhotosContainer();
   renderItems(photos, thumbnailsContainerElement, createThumbnail);
-};
+});
 
 
-const filterButtonClickHandler = debounce((target) => {
+const filterButtonClickHandler = (target) => {
   deleteActiveClass();
-  clearPhotosContainer();
   target.classList.add('img-filters__button--active');
   switch (target.id) {
     case 'filter-random':
@@ -52,7 +51,7 @@ const filterButtonClickHandler = debounce((target) => {
     default:
       renderFilteredPhotos(filterPhotosByDefault());
   }
-});
+};
 
 const initFilters = (photos) => {
   photosForFilter = photos;
