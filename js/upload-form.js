@@ -27,6 +27,9 @@ const getFileUrl = () => {
 const initUploadForm = () => {
   uploadFileInputElement.addEventListener('change', () => {
     const file = getFileUrl();
+    if (!file) {
+      return;
+    }
     imageUploadPreviewElement.src = file;
     document.querySelectorAll('.effects__preview').forEach((element) => {
       element.style.backgroundImage = `url('${file}')`;
