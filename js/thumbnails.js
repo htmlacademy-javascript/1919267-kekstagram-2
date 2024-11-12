@@ -33,4 +33,4 @@ const initThumbnails = (photos) => {
   renderItems(photos, thumbnailsContainerElement, createThumbnail);
 };
 
-export {initThumbnails};
+export {initThumbnails, createThumbnail};

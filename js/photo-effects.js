@@ -9,7 +9,7 @@ const Effects = {
 };
 
 const uploadFormElement = document.querySelector('#upload-select-image');
-const listOfEffectsContainer = uploadFormElement.querySelector('.effects__list');
+const listOfEffectsContainerElement = uploadFormElement.querySelector('.effects__list');
 const effectLevelFieldsetElement = uploadFormElement.querySelector('.img-upload__effect-level');
 const effectLevelValueInputElement = uploadFormElement.querySelector('.effect-level__value');
 const effectLevelSliderElement = uploadFormElement.querySelector('.effect-level__slider');
@@ -99,11 +99,11 @@ function setSliderOptions () {
 
 const initEffect = () => {
   createSlider(Effects[defaultEffect]);
-  listOfEffectsContainer.addEventListener('change', effectsListElementChangeHandler);
+  listOfEffectsContainerElement.addEventListener('change', effectsListElementChangeHandler);
 };
 
 function resetEffect () {
-  listOfEffectsContainer.querySelector('input[type="radio"]:first-child').checked = true;
+  listOfEffectsContainerElement.querySelector('input[type="radio"]:first-child').checked = true;
   setEffect(defaultEffect);
 }
 
