@@ -16,9 +16,9 @@ const findTemplate = (id) => {
 };
 
 //функция отрисовки элементов массива в фрагмент
-const renderItems = (array, container, createItem) => {
+const renderItems = (items, container, createItem) => {
   const fragment = document.createDocumentFragment();
-  array.forEach((item) => {
+  items.forEach((item) => {
     const newItem = createItem(item);
     fragment.append(newItem);
   });
@@ -35,14 +35,13 @@ const getRandomPositiveInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const getRandomUniqueElements = (array) => {
-  const newArray = array.slice();
+const getRandomUniqueElements = (items) => {
+  const copyItems = items.slice();
   const elements = [];
-  const newArrayLength = array.length;
-  for(let i = 0; i < newArrayLength; i++) {
-    const randomElement = getRandomPositiveInteger(0, newArray.length - 1);
-    elements.push(newArray[randomElement]);
-    newArray.splice(randomElement, 1);
+  for(let i = 0; i < copyItems.length; i++) {
+    const randomElement = getRandomPositiveInteger(0, copyItems.length - 1);
+    elements.push(copyItems[randomElement]);
+    copyItems.splice(randomElement, 1);
     if (elements.length >= NUMBER_RANDOM_PHOTOS) {
       break;
     }

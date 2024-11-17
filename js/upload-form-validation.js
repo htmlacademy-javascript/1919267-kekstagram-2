@@ -40,7 +40,7 @@ const isValidLength = (value) => {
 const checkNumberOfHashtags = (value) => getArrayFromString(value).length <= MAX_NUMBER_OF_HASHTAGS;
 
 const findSameElements = (value) => getArrayFromString(value)
-  .every((item, index, array) => array.slice(index + 1, array.length)
+  .every((item, index, elements) => elements.slice(index + 1, elements.length)
     .every((elem) => elem !== item));
 
 const checkEmptyTags = (value) => !value.endsWith('#');
