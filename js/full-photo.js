@@ -3,7 +3,7 @@ import { clearComments, renderComments } from './render-comments.js';
 const fullPhotoElement = document.querySelector('.big-picture');
 const closeButtonElement = fullPhotoElement.querySelector('.big-picture__cancel');
 
-const closeButtonHandler = () => {
+const closeButtonClickHandler = () => {
   fullPhotoElement.classList.add('hidden');
   closeFullPhoto();
 };
@@ -27,7 +27,7 @@ const fillPhotoInfo = (photo) => {
 function closeFullPhoto () {
   clearComments();
   fullPhotoElement.classList.add('hidden');
-  closeButtonElement.removeEventListener('click', closeButtonHandler);
+  closeButtonElement.removeEventListener('click', closeButtonClickHandler);
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', escapeKeyDownHandler);
 }
@@ -38,7 +38,7 @@ const openFullPhoto = (photo) => {
 
   fullPhotoElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  closeButtonElement.addEventListener('click', closeButtonHandler);
+  closeButtonElement.addEventListener('click', closeButtonClickHandler);
   closeButtonElement.focus();
   document.addEventListener('keydown', escapeKeyDownHandler);
 };
