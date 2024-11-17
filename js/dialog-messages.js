@@ -27,22 +27,22 @@ const createSuccessMessage = () => {
   successButtonElement = successMessageElement.querySelector('.success__button');
 };
 
-const removeSuccessMessage = () => {
+const successMessageButtonClickHandler = () => {
   successMessageElement.remove();
-  document.removeEventListener('keydown', escKeydownOnSuccessMessageHandler);
+  document.removeEventListener('keydown', successMessageKeydownHandler);
 };
 
-const successMessageElementHandler = (evt) => {
+const successMessageElementClickHandler = (evt) => {
   if (evt.target === successMessageElement) {
-    removeSuccessMessage();
+    successMessageButtonClickHandler();
   }
 };
 
 const addSuccessMessageHandlers = () => {
-  successButtonElement.addEventListener('click', removeSuccessMessage);
-  successMessageElement.addEventListener('click', successMessageElementHandler);
-  document.body.addEventListener('keydown', escKeydownOnSuccessMessageHandler);
-  document.addEventListener('click', onOutsideClickHandler);
+  successButtonElement.addEventListener('click', successMessageButtonClickHandler);
+  successMessageElement.addEventListener('click', successMessageElementClickHandler);
+  document.body.addEventListener('keydown', successMessageKeydownHandler);
+  document.addEventListener('click', outsideElementClickHandler);
 };
 
 // Функции создания и удаления сообщения о провале загрузки
@@ -57,52 +57,52 @@ const createErrorMessage = () => {
   errorButtonElement = errorMessageElement.querySelector('.error__button');
 };
 
-const removeErrorMessage = () => {
-  document.body.removeEventListener('keydown', escKeydownOnErrorMessageHandler);
-  errorButtonElement.removeEventListener('click', removeErrorMessage);
-  document.removeEventListener('click', onOutsideClickHandler);
+const errorMessageButtonClickHandler = () => {
+  document.body.removeEventListener('keydown', errorMessageKeydownHandler);
+  errorButtonElement.removeEventListener('click', errorMessageButtonClickHandler);
+  document.removeEventListener('click', outsideElementClickHandler);
   errorMessageElement.remove();
 };
 
-const errorMessageElementHandler = (evt) => {
+const errorMessageElementClickHandler = (evt) => {
   if (evt.target === errorMessageElement) {
-    removeErrorMessage();
+    errorMessageButtonClickHandler();
   }
 };
 
 const addErrorMessageHandlers = () => {
-  errorButtonElement.addEventListener('click', removeErrorMessage);
-  errorMessageElement.addEventListener('click', errorMessageElementHandler);
-  document.body.addEventListener('keydown', escKeydownOnErrorMessageHandler);
-  document.addEventListener('click', onOutsideClickHandler);
+  errorButtonElement.addEventListener('click', errorMessageButtonClickHandler);
+  errorMessageElement.addEventListener('click', errorMessageElementClickHandler);
+  document.body.addEventListener('keydown', errorMessageKeydownHandler);
+  document.addEventListener('click', outsideElementClickHandler);
 };
 
-function onOutsideClickHandler (evt) {
+function outsideElementClickHandler (evt) {
   const existingElement = document.querySelector('.success') || document.querySelector('.error');
   if (!evt.target.closest('.success__inner') && evt.target === existingElement) {
-    removeSuccessMessage();
+    successMessageButtonClickHandler();
   }
   if (!evt.target.closest('.error__inner') && evt.target === existingElement) {
-    removeErrorMessage();
+    errorMessageButtonClickHandler();
   }
 }
 
 // Функции нажатия ESC
 
-function escKeydownOnSuccessMessageHandler (evt) {
+function successMessageKeydownHandler (evt) {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    removeSuccessMessage();
+    successMessageButtonClickHandler();
   }
 }
 
-function escKeydownOnErrorMessageHandler (evt) {
+function errorMessageKeydownHandler (evt) {
   evt.stopPropagation();
   const existingElement = document.querySelector('.success') || document.querySelector('.error');
   const closeButtonElement = existingElement.querySelector('button');
 
   if (evt.target === existingElement || evt.target === closeButtonElement || evt.key === 'Escape') {
-    removeErrorMessage();
+    errorMessageButtonClickHandler();
   }
 }
 

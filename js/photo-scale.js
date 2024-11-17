@@ -20,14 +20,14 @@ const changeScaleValueInHTML = () => {
   scaleValueInputElement.value = `${scaleValue}%`;
 };
 
-const makeScaleValueBigger = () => {
+const scaleBiggerButtonClickHandler = () => {
   if (scaleValue + SCALE_VALUE_STEP <= MAX_SCALE_VALUE) {
     scaleValue += SCALE_VALUE_STEP;
     changeScaleValueInHTML();
   }
 };
 
-const makeScaleValueSmaller = () => {
+const scaleSmallerButtonClickHandler = () => {
   if (scaleValue - SCALE_VALUE_STEP >= MIN_SCALE_VALUE) {
     scaleValue -= SCALE_VALUE_STEP;
     changeScaleValueInHTML();
@@ -41,8 +41,8 @@ const resetScale = () => {
 };
 
 const addImagePreviewScale = () => {
-  scaleBiggerButtonElement.addEventListener('click', makeScaleValueBigger);
-  scaleSmallerButtonElement.addEventListener('click', makeScaleValueSmaller);
+  scaleBiggerButtonElement.addEventListener('click', scaleBiggerButtonClickHandler);
+  scaleSmallerButtonElement.addEventListener('click', scaleSmallerButtonClickHandler);
 };
 
 export {addImagePreviewScale, resetScale};
